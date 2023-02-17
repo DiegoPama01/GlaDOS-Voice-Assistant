@@ -11,13 +11,11 @@ class Weather():
     def __init__(self):
         self.ow = OWM(api_key=self.api_key)
         self.mgr = self.ow.weather_manager()
-        locator = Nominatim(user_agent="myGeocoder")
+
         city = "Valencia"
         country = "ES"
         self.__location = city + ", " + country
-        loc = locator.geocode(self.__location)
-        self.lat = loc.latitude
-        self.long = loc.longitude
+
         
     @property
     def weather(self):

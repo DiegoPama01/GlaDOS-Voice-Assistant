@@ -8,6 +8,8 @@ class AI():
     def __init__(self, name=None):
         self.engine = pyttsx3.init()
         self.engine.setProperty('voice', 'spanish')
+        voices = self.engine.getProperty("voices")
+        self.engine.setProperty('voice', voices[0].id) 
         
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
@@ -19,6 +21,7 @@ class AI():
         
         with self.m as source:
             self.r.adjust_for_ambient_noise(source)
+            self.r.energy_threshold = self.r.energy_threshold + 50
             
     @property
     def name(self):

@@ -46,7 +46,7 @@ class AI():
             phrase = self.r.recognize_google(audio,language="es-ES",show_all=False)
             sentence = "Got it, you said" + phrase
             self.engine.say(sentence)
-            self.engine.save_to_file(sentence,"speech.wav")
+            #self.engine.save_to_file(sentence,"speech.wav")
             self.engine.runAndWait()
         except Exception as error:
             print("Sorry, didn't catch that", error)

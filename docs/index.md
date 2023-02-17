@@ -1,3 +1,3 @@
 # Subscribe
 To subscribe to the ical:
-[myfyle.ics](myfyle.ics)
+[myfile.ics](myfile.ics)

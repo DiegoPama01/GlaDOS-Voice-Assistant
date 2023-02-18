@@ -1,5 +1,7 @@
 import pyttsx3
 import speech_recognition as sr
+from eventhook import Event_hook
+from threading import Thread, Lock
 
 class AI():
     __name = ""
@@ -8,20 +10,21 @@ class AI():
     def __init__(self, name=None):
         self.engine = pyttsx3.init()
         self.engine.setProperty('voice', 'spanish')
-        voices = self.engine.getProperty("voices")
-        self.engine.setProperty('voice', voices[0].id) 
         
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
         
         if name is not None:
             self.__name = name
-            
-        print("Listening")
-        
+
         with self.m as source:
             self.r.adjust_for_ambient_noise(source)
-            self.r.energy_threshold = self.r.energy_threshold + 50
+            
+        # Setup event hooks
+        self.before_speaking = Event_hook()
+        self.after_speaking = Event_hook()
+        self.before_listening = Event_hook()
+        self.after_listening = Event_hook()
             
     @property
     def name(self):
@@ -29,32 +32,40 @@ class AI():
     
     @name.setter
     def name(self, value):
-        sentence = "Hello, my name is" + self.__name
         self.__name = value
+        sentence = "Hola, mi nombre es " + self.__name
         self.engine.say(sentence)
         self.engine.runAndWait()
             
     def say(self, sentence):
+        self.before_speaking.trigger(sentence)
         self.engine.say(sentence)
         self.engine.runAndWait()
+        self.after_speaking.trigger(sentence)
+    
             
     def listen(self):
-        print("Say something")
+        print("Di algo")
+        self.before_listening.trigger()
         with self.m as source:
             audio = self.r.listen(source)
                 
-        print("Got it") 
+        print("Entendido") 
         phrase = ""        
         try:
             phrase = self.r.recognize_google(audio,language="es-ES",show_all=False)
-            sentence = "Got it, you said" + phrase
+            self.after_listening.trigger(phrase)
+            sentence = "Creo que ha dicho " + phrase
             self.engine.say(sentence)
             #self.engine.save_to_file(sentence,"speech.wav")
             self.engine.runAndWait()
         except Exception as error:
-            print("Sorry, didn't catch that", error)
-            self.engine.say("Sorry, didn't catch that")
+            print("Lo siento no te he entendido", error)
+            self.engine.say("Lo siento no te he entendido")
             self.engine.runAndWait()
         return phrase
-        
+    
+    def stop_ai(self):
+        self.engine.stop()
+        print("stopped engine")
             

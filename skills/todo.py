@@ -1,6 +1,10 @@
+from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 from uuid import uuid4
+from skills import factory
+
+from ai import AI
 
 class Status(Enum):
     NOT_STARTED = 0
@@ -149,6 +153,20 @@ class Todo():
         for item in self.__todos:
             print(item.title,item.status,item.priority,item.age)
     
+    @classmethod
+    def show(cls):
+        print("*"*80)
+        print("Todo Items")
+        print('*'*80)
+        count = 1
+        if len(cls.__todos) == 0:
+            print("No items in list!")
+        else:
+            for item in cls.__todos:
+                print(count, item.title, item.status, item.priority, item.age, item.id)
+                count += 1 
+            print("")    
+
     def remove_item(self,uuid:str=None,title:str=None)->bool:
         if title is None and uuid is None:
             print("You need to provide some detail for me to remove an item from the list")
@@ -163,4 +181,63 @@ class Todo():
         if uuid:
             self.__todos.remove(uuid)
             return True
+
+@dataclass
+class Todo_skill():
+    name = 'todo_skill'
+
+    def commands(self, command:str):
+        return ["abre la lista de tareas", "añade a la lista de tareas", 
+                "recuérdame las tareas", "dime las tareas", 
+                "elimina una tarea", "tacha una tarea"]
+
+    def handle_command(self, command:str, ai:AI):
+        if command in ["abre la lista de tareas", "añade a la lista de tareas"]:
+            add_todo()
+        command = ""
+        if command in ["recuérdame las tareas", "dime las tareas"]:
+            list_todos()
+        command = ""
+        if command in ["elimina una tarea", "tacha una tarea"]:
+            remove_todo()
+        return command
+
+def initialize():
+    factory.register('todo_skill', Todo_skill)
+
+todo = Todo()
+
+def add_todo(glados:AI)->bool:
+    item = Item()
+    glados.say("Dime que debo añadir")
+    try:
+        item.title = glados.listen()
+        todo.new_item(item)
+        message = "Added " + item.title
+        glados.say(message)
+        return True
+    except:
+        print("oops there was an error")
+        return False
+    
+def list_todos(glados:AI):
+    if len(todo) > 0:
+        glados.say("Tus tareas son")
+        for item in todo:
+            glados.say(item.title)
+    else:
+        glados.say("No quedan más tareas hoy")
+
+def remove_todo(glados:AI)->bool:
+    glados.say("Dime que debo eliminar")
+    try:
+        item_title = glados.listen()
+        todo.remove_item(title=item_title)
+        message = "Eliminado " + item_title
+        glados.say(message)
+        return True
+    except:
+        print("opps there was an error")
+        return False
+
         

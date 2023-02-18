@@ -1,6 +1,10 @@
+from dataclasses import dataclass
 from pyowm import OWM
 from geopy import Nominatim, location
 from datetime import datetime
+from skills import factory
+
+from ai import AI
 
 class Weather():
     # Ubicación de la que queremos sacar la informacion
@@ -37,8 +41,19 @@ class Weather():
             print("UVI:",uvi)
         except Exception as e:
             print(e)
-        
-  
-        
-w = Weather()
-o = w.forecast()
+            
+@dataclass
+class Weather_skill:
+    name = 'weather_skill'
+
+    def commands(self, command:str):
+        return ['weather', 'forecast', 'what is the weather like', 'give me the forecast',"what's the weather","what's the weather like"]
+
+    def handle_command(self, command:str, ai:AI):
+        myweather = Weather()
+        forecast = myweather.forecast
+        ai.say(forecast)
+        return forecast
+
+def initialize():
+    factory.register(Weather_skill.name, Weather_skill)

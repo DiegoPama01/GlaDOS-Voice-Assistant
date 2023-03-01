@@ -10,8 +10,8 @@ class Jokes_skill():
     def commands(self, command:str):
         return ['cuéntame un chiste']
     
-    def handle_commands(self, command:str,ai:AI):
-        joke = pyjokes.get_joke(language="es",category="chuck")
+    def handle_command(self, command:str,ai:AI):
+        joke = pyjokes.get_joke(language="es")
         ai.say(joke)
         return joke
     

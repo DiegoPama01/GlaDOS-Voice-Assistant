@@ -14,12 +14,12 @@ ul{
     font-family: Helvetica, Arial, sans-serif;
   }
   
-  .COMMAND{
+  .RESPONSE{
     background: #eee;
     float: left;
   }
   
-  .RESPONSE{
+  .COMMAND{
     float: right;
     background: #0084ff;
     color: #fff;

@@ -49,16 +49,11 @@ while True and command not in ["adios","adiós"]:
                 skill.handle_command(command, glados)
                 break
         
-glados.say("Adiós")
 
-glados.stop.trigger()
-print('telling ai to stop')
+
+print('Parando la IA')
 glados.stop_ai()
-
 print(glados.name, "goes to sleep")
-
-del(glados)
-sys.exit()
 
 
 

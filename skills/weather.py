@@ -47,7 +47,7 @@ class Weather_skill:
     name = 'weather_skill'
 
     def commands(self, command:str):
-        return ['weather', 'forecast', 'what is the weather like', 'give me the forecast',"what's the weather","what's the weather like"]
+        return ['tiempo', 'reporte del tiempo', 'como está el día', 'dame el reporte del tiempo']
 
     def handle_command(self, command:str, ai:AI):
         myweather = Weather()

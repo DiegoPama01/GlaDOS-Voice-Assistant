@@ -25,6 +25,10 @@ class AI():
         self.after_speaking = Event_hook()
         self.before_listening = Event_hook()
         self.after_listening = Event_hook()
+        self.start = Event_hook()
+        self.stop = Event_hook()
+        
+        self.start.trigger()
             
     @property
     def name(self):
@@ -67,5 +71,6 @@ class AI():
     
     def stop_ai(self):
         self.engine.stop()
-        print("stopped engine")
+        self.stop.trigger()
+        print("IA parada")
             

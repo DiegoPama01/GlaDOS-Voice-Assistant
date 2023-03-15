@@ -4,8 +4,8 @@ from ai import AI
 import plugins.plugin_factory
 
 @dataclass
-class Cowsay_plugin:
-    name = 'cowsay'
+class CowsayPlugin:
+    name = 'cowsay_plugin'
 
     def cowsay(self, message):
         print(f"moo {message}")
@@ -18,6 +18,6 @@ class Cowsay_plugin:
 
 def initialize():
     # register with Factory or plugin?
-    plugins.plugin_factory.register('cowsay_plugin', Cowsay_plugin)
+    plugins.plugin_factory.register(CowsayPlugin.name, CowsayPlugin)
     
     print("Cow Say Plugin initialized")

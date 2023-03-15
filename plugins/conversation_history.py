@@ -7,7 +7,7 @@ from flask_cors import CORS
 import logging
 from threading import Thread
 
-class Conversation_history:
+class ConversationHistory:
     items = []
     history: int = 20
   
@@ -41,11 +41,11 @@ class Conversation_history:
     
 
 @dataclass
-class Conversation_history_plugin:
-    name = 'conversation_history'
+class ConversationHistoryPlugin:
+    name = 'conversation_history_plugin'
     app = None
 
-    __conversation_history = Conversation_history()
+    __conversation_history = ConversationHistory()
     def __init__(self):
         self.app = Flask(__name__)
         CORS(self.app)
@@ -89,4 +89,4 @@ class Conversation_history_plugin:
 
 def initialize():
     # register with Factory or plugin?
-    plugins.plugin_factory.register('conversation_history_plugin', Conversation_history_plugin)
+    plugins.plugin_factory.register(ConversationHistoryPlugin.name, ConversationHistoryPlugin)

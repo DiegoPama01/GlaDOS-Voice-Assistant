@@ -4,7 +4,7 @@ from skills import factory
 from ai import AI
 
 @dataclass
-class Facts_skill():
+class FactsSkill():
     name='facts_skill'
     
     def commands(self,command:str):
@@ -16,4 +16,4 @@ class Facts_skill():
         return fact
     
 def initialize():
-    factory.register(Facts_skill.name,Facts_skill)
+    factory.register(FactsSkill.name,FactsSkill)

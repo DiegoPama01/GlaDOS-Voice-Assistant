@@ -6,8 +6,8 @@ import logging
 from threading import Thread
 
 @dataclass
-class Webui_plugin:
-    name = 'webui'
+class WebuiPlugin:
+    name = 'webui_plugin'
     
     app = None
     ai = None
@@ -46,4 +46,4 @@ class Webui_plugin:
 
 def initialize():
     # register with Factory or plugin?
-    plugins.plugin_factory.register('webui_plugin', Webui_plugin)
+    plugins.plugin_factory.register(WebuiPlugin.name, WebuiPlugin)

@@ -1,6 +1,6 @@
 import pyttsx3
 import speech_recognition as sr
-from eventhook import Event_hook
+from eventhook import EventHook
 from threading import Thread, Lock
 
 class AI():
@@ -21,12 +21,12 @@ class AI():
             self.r.adjust_for_ambient_noise(source)
             
         # Setup event hooks
-        self.before_speaking = Event_hook()
-        self.after_speaking = Event_hook()
-        self.before_listening = Event_hook()
-        self.after_listening = Event_hook()
-        self.start = Event_hook()
-        self.stop = Event_hook()
+        self.before_speaking = EventHook()
+        self.after_speaking = EventHook()
+        self.before_listening = EventHook()
+        self.after_listening = EventHook()
+        self.start = EventHook()
+        self.stop = EventHook()
         
         self.start.trigger()
             

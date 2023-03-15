@@ -3,7 +3,7 @@ from skills import factory
 from ai import AI
 
 @dataclass
-class Mirror_mirror_skill():
+class MirrorMirrorSkill():
     name = "mirror_mirror_skill"
     
     def commands(self, command:str):
@@ -16,4 +16,4 @@ class Mirror_mirror_skill():
         return message
     
 def initialize():
-    factory.register(Mirror_mirror_skill.name,Mirror_mirror_skill)
+    factory.register(MirrorMirrorSkill.name,MirrorMirrorSkill)

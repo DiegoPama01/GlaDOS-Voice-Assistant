@@ -1,5 +1,5 @@
 
-class Event_hook:
+class EventHook:
 
     handlers = []
 

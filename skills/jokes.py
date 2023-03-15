@@ -4,7 +4,7 @@ from ai import AI
 import pyjokes
 
 @dataclass
-class Jokes_skill():
+class JokesSkill():
     name = 'jokes_skill'
     
     def commands(self, command:str):
@@ -16,4 +16,4 @@ class Jokes_skill():
         return joke
     
 def initialize():
-    factory.register(Jokes_skill.name,Jokes_skill)
+    factory.register(JokesSkill.name,JokesSkill)

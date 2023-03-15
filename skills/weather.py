@@ -43,7 +43,7 @@ class Weather():
             print(e)
             
 @dataclass
-class Weather_skill:
+class WeatherSkill:
     name = 'weather_skill'
 
     def commands(self, command:str):
@@ -56,4 +56,4 @@ class Weather_skill:
         return forecast
 
 def initialize():
-    factory.register(Weather_skill.name, Weather_skill)
+    factory.register(WeatherSkill.name, WeatherSkill)

@@ -1,7 +1,7 @@
 from ai import AI
 from dataclasses import dataclass
 from datetime import datetime
-from dateutil.relativedelta import *
+from dateutil.relativedelta import relativedelta
 from ics import Calendar, Event
 from pathlib import Path
 from skills import factory
@@ -19,7 +19,7 @@ calendar_datafile = 'myfile.yml'
 
 
 
-class Calendar_for_AI():
+class CalendarForAI():
     c = Calendar()
         
     def add_event(self,begin:str,name:str,description:str=None)->bool:
@@ -32,7 +32,7 @@ class Calendar_for_AI():
         try:
             self.c.events.add(e)
             return True
-        except:
+        except Exception:
             print("No se pudo añadir el evento")
             return False
     
@@ -46,14 +46,14 @@ class Calendar_for_AI():
         print("No se encontró el evento:",event_name)
         
     def parse_to_dict(self):
-        dict= []
+        dictionary= []
         for event in self.c.events:
             my_event = {}
             my_event["begin"] = event.begin.datetime
             my_event["name"] = event.name
             my_event["description"] = event.description
-            dict.append(my_event)
-        return dict
+            dictionary.append(my_event)
+        return dictionary
     
     def save(self):
         with open(calendar_filename,"w") as my_file:
@@ -62,7 +62,7 @@ class Calendar_for_AI():
         if self.c.events == set():
             try:
                 os.remove(calendar_datafile)
-            except:
+            except Exception:
                 print("No se puedo eliminar el archivo YAML")
         else:
             with open(calendar_datafile,"w") as outfile:
@@ -85,12 +85,19 @@ class Calendar_for_AI():
         else:
             print("No existe el archivo")
             
-    def list_events(self, period:str=None)->bool:
-        ''' Lista los eventos por venir
-            si period se deja vacio serán los de esta semana
-            - "all" - todos los eventos
-            - "this week" - los de esta semana
-            - "this month" - los de este mes
+    def list_events(self, period:str=None)-> bool | list:
+        ''' Lista los eventos por venir si period se deja vacio serán los de esta semana
+        
+            Args:
+                period(str): Período de tiempo en cual buscar eventos. 
+                
+                    - "all": todos los eventos
+                    - "this week": los de esta semana
+                    - "this month": los de este mes
+                    
+            Returns: 
+                - False(bool) si no hay eventos en el calendario
+                - Lista de eventos(list) en caso de que haya tareas en el calendario
         '''
         if period == None:
             period = "this week"
@@ -115,9 +122,9 @@ class Calendar_for_AI():
             return event_list
                 
 @dataclass
-class Calendar_skill():
+class CalendarSkill():
     name = 'calendar_skill'
-    calendar = Calendar_for_AI()
+    calendar = CalendarForAI()
     calendar.load()
     
     def commands(self, command:str):
@@ -137,7 +144,7 @@ class Calendar_skill():
             self.calendar.add_event(begin=event_isodate,name=event_name,description=event_description)
             self.calendar.save()
             return True
-        except:
+        except Exception:
             print("Parece que ha habido un error")
             return False
                 
@@ -150,10 +157,10 @@ class Calendar_skill():
                 self.calendar.save()
                 print("Elemento removido exitosamente")
                 return True
-            except:
+            except Exception:
                 print("No se pudo  encontrar el evento:",event_name)
                 return False
-        except:
+        except Exception:
             print("Hubo un error de algun tipo")
             return False
     
@@ -185,15 +192,15 @@ class Calendar_skill():
                 
     def handle_command(self, command:str,ai:AI):
         if command in ["añade un evento"]:
-            self.add_event()
+            self.add_event(ai)
         if command in ["elimina un evento"]:
-            self.remove_event()
+            self.remove_event(ai)
         if command in ["qué tengo para esta semana"]:
-            self.list_events()
+            self.list_events(ai)
         if command in ["qué tengo para este mes"]:
-            self.list_events(period="this month")
+            self.list_events(ai,period="this month")
         if command in ["listame todos los eventos"]:
-            self.list_events(period="all")
+            self.list_events(ai,period="all")
 
 def initialize():
-    factory.register('calendar_skill', Calendar_skill)
+    factory.register(CalendarSkill.name, CalendarSkill)

@@ -17,8 +17,6 @@ def create(arguments:dict[str, Any])->Plugin:
     args_copy = arguments.copy()
     print(f"args: {args_copy}")
     plugin_name = args_copy.pop('name')
-    # remainder = args_copy
-    # print(f"remainder: {remainder}")
     try:
         creation_func = plugin_creation_funcs[plugin_name]
         print(f"Creation funcs {creation_func}")

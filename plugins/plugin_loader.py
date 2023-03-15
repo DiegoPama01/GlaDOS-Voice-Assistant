@@ -10,7 +10,7 @@ class PluginInterface:
         """ Initialize the plugin """
         
 def import_module(name:str) -> PluginInterface:
-    return importlib.import_module(name) # type: ignore
+    return importlib.import_module(name)
 
 def load_plugins(plugins: list[str])->None:
     """ Load the plugins """

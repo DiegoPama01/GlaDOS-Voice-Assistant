@@ -183,7 +183,7 @@ class Todo():
             return True
 
 @dataclass
-class Todo_skill():
+class TodoSkill():
     name = 'todo_skill'
 
     def commands(self, command:str):
@@ -193,17 +193,17 @@ class Todo_skill():
 
     def handle_command(self, command:str, ai:AI):
         if command in ["abre la lista de tareas", "añade a la lista de tareas"]:
-            add_todo()
+            add_todo(ai)
         command = ""
         if command in ["recuérdame las tareas", "dime las tareas"]:
-            list_todos()
+            list_todos(ai)
         command = ""
         if command in ["elimina una tarea", "tacha una tarea"]:
-            remove_todo()
+            remove_todo(ai)
         return command
 
 def initialize():
-    factory.register('todo_skill', Todo_skill)
+    factory.register(TodoSkill.name, TodoSkill)
 
 todo = Todo()
 
@@ -216,7 +216,7 @@ def add_todo(glados:AI)->bool:
         message = "Added " + item.title
         glados.say(message)
         return True
-    except:
+    except Exception:
         print("oops there was an error")
         return False
     
@@ -236,7 +236,7 @@ def remove_todo(glados:AI)->bool:
         message = "Eliminado " + item_title
         glados.say(message)
         return True
-    except:
+    except Exception:
         print("opps there was an error")
         return False
 

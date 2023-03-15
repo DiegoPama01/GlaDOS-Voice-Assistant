@@ -4,7 +4,7 @@ from skills import factory
 from ai import AI
 
 @dataclass
-class Goodday_skill():
+class GoodDaySkill():
     name='goodday_skill'
     
     def commands(self,command:str):
@@ -13,7 +13,6 @@ class Goodday_skill():
     def handle_command(self, command:str, ai:AI):
         now = datetime.now()
         hr = now.hour
-        print(hr)
         if hr <= 0 <= 12:
             message = "Buenos días"
         if hr >= 12 <= 17:
@@ -26,4 +25,4 @@ class Goodday_skill():
         return self.name
     
 def initialize():
-    factory.register(Goodday_skill.name,Goodday_skill)
+    factory.register(GoodDaySkill.name,GoodDaySkill)

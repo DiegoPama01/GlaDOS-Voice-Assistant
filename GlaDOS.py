@@ -3,12 +3,12 @@ from ai import AI
 import json
 from skills import loader, factory
 from plugins import plugin_loader, plugin_factory
-from eventhook import Event_hook
+from eventhook import EventHook
 
 glados = AI(name="GlaDOS")
 
-glados.start = Event_hook()
-glados.stop = Event_hook()
+glados.start = EventHook()
+glados.stop = EventHook()
 
 # Load the skills
 print("")
@@ -38,7 +38,9 @@ glados.start.trigger()
 
 command = ""
 
-while True and command not in ["adios","adiós"]:
+ai_alive = True
+
+while ai_alive and command not in ["adios","adiós"]:
     command = ""
     command = glados.listen()
     if command:

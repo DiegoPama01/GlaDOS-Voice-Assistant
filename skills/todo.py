@@ -32,6 +32,7 @@ class Item():
         if title is not None:
             self.__title = title
         self.__id = str(uuid4())
+        print(self.__id)
         
     @property
     def icon(self):
@@ -186,7 +187,7 @@ class Todo():
 class TodoSkill():
     name = 'todo_skill'
 
-    def commands(self, command:str):
+    def commands(self, _):
         return ["abre la lista de tareas", "añade a la lista de tareas", 
                 "recuérdame las tareas", "dime las tareas", 
                 "elimina una tarea", "tacha una tarea"]

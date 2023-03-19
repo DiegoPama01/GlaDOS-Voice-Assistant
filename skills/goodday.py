@@ -7,10 +7,10 @@ from ai import AI
 class GoodDaySkill():
     name='goodday_skill'
     
-    def commands(self,command:str):
-        return ["hola","buen día","buenos días","buenas tardes","buenas noches"]
+    def commands(self,_):
+        return ["hola","buen día","buen dia","buenos días","buenos dias","buenas tardes","buenas noches"]
     
-    def handle_command(self, command:str, ai:AI):
+    def handle_command(self, _, ai:AI):
         now = datetime.now()
         hr = now.hour
         if hr <= 0 <= 12:

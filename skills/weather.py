@@ -39,6 +39,8 @@ class Weather():
             print("Humidity:",humidity)
             print("Temperature:",temperature)
             print("UVI:",uvi)
+            forecast_text = f"Hoy el día estará {detail_status} con un presión media de {pressure} y un índice de húmedad del {humidity}%. Por último la temperatura media está alrededor de los {temperature} grados celsius"
+            return forecast_text
         except Exception as e:
             print(e)
             
@@ -46,14 +48,12 @@ class Weather():
 class WeatherSkill:
     name = 'weather_skill'
 
-    def commands(self, command:str):
+    def commands(self, _):
         return ['tiempo', 'reporte del tiempo', 'como está el día', 'dame el reporte del tiempo']
 
-    def handle_command(self, command:str, ai:AI):
+    def handle_command(self, _, ai:AI):
         myweather = Weather()
-        forecast = myweather.forecast
-        ai.say(forecast)
-        return forecast
+        ai.say(myweather.forecast())
 
 def initialize():
     factory.register(WeatherSkill.name, WeatherSkill)

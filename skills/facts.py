@@ -7,10 +7,10 @@ from ai import AI
 class FactsSkill():
     name='facts_skill'
     
-    def commands(self,command:str):
+    def commands(self,_):
         return ["cuéntame un hecho", "cuéntame algo interesante"]
     
-    def handle_command(self, command:str, ai:AI):
+    def handle_command(self, _, ai:AI):
         fact = randfacts.get_fact()
         ai.say(fact)
         return fact

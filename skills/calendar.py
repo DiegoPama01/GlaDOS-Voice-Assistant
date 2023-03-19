@@ -86,19 +86,18 @@ class CalendarForAI():
             print("No existe el archivo")
             
     def list_events(self, period:str=None)-> bool | list:
-        ''' Lista los eventos por venir si period se deja vacio serán los de esta semana
+        """Lista los eventos por venir si period se deja vacio serán los de esta semana
+
+        Args:
+            period (str, optional): Período de tiempo en cual buscar eventos. 
+            - "all": todos los eventos
+            - "this week": los de esta semana
+            - "this month": los de este mes
+
+        Returns:
+            bool | list: Tareas guardadas en ese periodo de tiempo
+        """
         
-            Args:
-                period(str): Período de tiempo en cual buscar eventos. 
-                
-                    - "all": todos los eventos
-                    - "this week": los de esta semana
-                    - "this month": los de este mes
-                    
-            Returns: 
-                - False(bool) si no hay eventos en el calendario
-                - Lista de eventos(list) en caso de que haya tareas en el calendario
-        '''
         if period == None:
             period = "this week"
         
@@ -127,7 +126,7 @@ class CalendarSkill():
     calendar = CalendarForAI()
     calendar.load()
     
-    def commands(self, command:str):
+    def commands(self, _):
         return ["añade un evento","qué tengo para esta semana","qué tengo para este mes","elimina un evento","listame todos los eventos"]
     
     def add_event(self, glados:AI)->bool:

@@ -71,13 +71,13 @@ class ConversationHistoryPlugin:
     def start(self):
         print("starting API server")
         self.flask = Thread(target=self.start_flask_thread,args=())
+        self.flask.daemon = True
         self.flask.start()
         return self
 
     def stop(self):
         # shutdown the flask server
         print("stopping api server")
-        self.flask.join()
 
     def register(self, ai:AI):
         self.ai = ai

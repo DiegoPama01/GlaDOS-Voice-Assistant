@@ -16,9 +16,10 @@ with open("./skills/skills.json") as f:
     data = json.load(f)
     loader.load_skills(data["plugins"])
 
-skills = [factory.create(item) for item in data["skills"]]
+
+glados.__skill = [factory.create(item) for item in data["skills"]]
 print("")
-print(f'Skills: {skills}')
+print(f'Skills: {glados.__skill}')
 print("")
 # Load the plugins
 print("")
@@ -38,15 +39,13 @@ glados.start.trigger()
 
 command = ""
 
-ai_alive = True
-
-while ai_alive and command not in ["adios","adiós"]:
+while command not in ["adios","adiós"]:
     command = ""
     command = glados.listen()
     if command:
         command = command.lower()
         print(f'command heard: {command}') 
-        for skill in skills:
+        for skill in glados.__skill:
             if command in skill.commands(command):
                 skill.handle_command(command, glados)
                 break
@@ -56,7 +55,3 @@ while ai_alive and command not in ["adios","adiós"]:
 print('Parando la IA')
 glados.stop_ai()
 print(glados.name, "goes to sleep")
-
-
-
-

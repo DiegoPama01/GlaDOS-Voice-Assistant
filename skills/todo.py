@@ -189,14 +189,14 @@ class TodoSkill():
 
     def commands(self, _):
         return ["abre la lista de tareas", "añade a la lista de tareas", 
-                "recuérdame las tareas", "dime las tareas", 
+                "recuerdame las tareas", "dime las tareas", 
                 "elimina una tarea", "tacha una tarea"]
 
     def handle_command(self, command:str, ai:AI):
         if command in ["abre la lista de tareas", "añade a la lista de tareas"]:
             add_todo(ai)
         command = ""
-        if command in ["recuérdame las tareas", "dime las tareas"]:
+        if command in ["recuerdame las tareas", "dime las tareas"]:
             list_todos(ai)
         command = ""
         if command in ["elimina una tarea", "tacha una tarea"]:

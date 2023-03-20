@@ -4,6 +4,7 @@ import json
 from skills import loader, factory
 from plugins import plugin_loader, plugin_factory
 from eventhook import EventHook
+from utils import normalize;
 
 glados = AI(name="GlaDOS")
 
@@ -39,15 +40,18 @@ glados.start.trigger()
 
 command = ""
 
-while command not in ["adios","adiós"]:
+while command not in ["adiós"]:
     command = ""
     command = glados.listen()
     if command:
         command = command.lower()
-        print(f'command heard: {command}') 
+        command_normalized = normalize(command)
+        
+        print(f'command heard: {command}')
+        print(f'command normalized: {command_normalized}') 
         for skill in glados.__skill:
-            if command in skill.commands(command):
-                skill.handle_command(command, glados)
+            if command_normalized in skill.commands(command_normalized):
+                skill.handle_command(command_normalized, glados)
                 break
         
 

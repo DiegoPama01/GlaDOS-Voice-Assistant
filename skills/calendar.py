@@ -127,7 +127,7 @@ class CalendarSkill():
     calendar.load()
     
     def commands(self, _):
-        return ["añade un evento","qué tengo para esta semana","qué tengo para este mes","elimina un evento","listame todos los eventos"]
+        return ["añade un evento","que tengo para esta semana","que tengo para este mes","elimina un evento","listame todos los eventos"]
     
     def add_event(self, glados:AI)->bool:
         glados.say("¿Cual es el nombre del evento?")

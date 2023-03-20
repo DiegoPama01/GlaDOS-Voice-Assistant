@@ -13,7 +13,7 @@ class GoodDaySkill():
     def handle_command(self, _, ai:AI):
         now = datetime.now()
         hr = now.hour
-        if hr <= 0 <= 12:
+        if hr <= 12:
             message = "Buenos días"
         if hr >= 12 <= 17:
             message = "Buenas tardes"

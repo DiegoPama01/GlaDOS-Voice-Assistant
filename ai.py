@@ -1,7 +1,8 @@
-import pyttsx3
-import speech_recognition as sr
 from eventhook import EventHook
-from threading import Thread, Lock
+from pyaudio import PyAudio, paInt16
+from vosk import Model, KaldiRecognizer
+import json
+import pyttsx3
 
 class AI():
     __name = ""
@@ -11,14 +12,16 @@ class AI():
         self.engine = pyttsx3.init()
         self.engine.setProperty('voice', 'spanish')
         
-        self.r = sr.Recognizer()
-        self.m = sr.Microphone()
-        
-        if name is not None:
-            self.__name = name
+        model = Model('model\\vosk-model-es-0.42') # path to model
+        self.r = KaldiRecognizer(model, 16000)
 
-        with self.m as source:
-            self.r.adjust_for_ambient_noise(source)
+        self.m = PyAudio()
+
+        if name is not None:
+            self.__name = name 
+
+        self.audio = self.m.open(format=paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
+        self.audio.start_stream()
             
         # Setup event hooks
         self.before_speaking = EventHook()
@@ -47,27 +50,22 @@ class AI():
         self.engine.runAndWait()
         self.after_speaking.trigger(sentence)
     
-            
     def listen(self):
-        print("Di algo")
-        self.before_listening.trigger()
-        with self.m as source:
-            audio = self.r.listen(source)
-                
-        print("Entendido") 
-        phrase = ""        
-        try:
-            phrase = self.r.recognize_google(audio,language="es-ES",show_all=False)
-            self.after_listening.trigger(phrase)
-            sentence = "Creo que ha dicho " + phrase
-            self.engine.say(sentence)
-            #self.engine.save_to_file(sentence,"speech.wav")
-            self.engine.runAndWait()
-        except Exception as error:
-            print("Lo siento no te he entendido", error)
-            self.engine.say("Lo siento no te he entendido")
-            self.engine.runAndWait()
-        return phrase
+           
+        phrase = ""
+        
+        if self.r.AcceptWaveform(self.audio.read(4096,exception_on_overflow = False)): 
+            self.before_listening.trigger()
+            phrase = self.r.Result()
+            phrase = phrase.removeprefix('the ')
+            
+            phrase = str(json.loads(phrase)["text"])
+
+            if phrase:
+                self.after_listening.trigger(phrase)
+            return phrase   
+
+        return None
     
     def stop_ai(self):
         self.engine.stop()

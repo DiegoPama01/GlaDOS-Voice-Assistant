@@ -1,6 +1,3 @@
-# import nltk
-# nltk.download()
-
 
 def normalize(s:str)->str:
     """Elimina las tildes de una cadena y devuelve esa cadena normalizada

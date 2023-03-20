@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 from pyowm import OWM
-from geopy import Nominatim, location
-from datetime import datetime
 from skills import factory
 
 from ai import AI

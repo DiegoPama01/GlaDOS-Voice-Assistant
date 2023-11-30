@@ -15,7 +15,7 @@ class FactsSkill():
     def handle_command(self, _, ai:AI):
         fact = random.choice(curiosidades)
         print(fact)
-        ai.say(fact)
+        ai.say("I am confused")
         return fact
     
 def initialize():

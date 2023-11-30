@@ -11,7 +11,7 @@ class JokesSkill():
         return ['cuentame un chiste']
     
     def handle_command(self, _,ai:AI):
-        joke = pyjokes.get_joke(language="es", category="all")
+        joke = pyjokes.get_joke(language="en", category="all")
         ai.say(joke)
         return joke
     

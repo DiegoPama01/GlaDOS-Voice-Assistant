@@ -10,7 +10,7 @@ class AI():
     
     def __init__(self, name=None):
         self.engine = pyttsx3.init()
-        self.engine.setProperty('voice', 'spanish')
+        self.engine.setProperty('voice', "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0")
         
         model = Model('model\\vosk-model-es-0.42') # path to model
         self.r = KaldiRecognizer(model, 16000)

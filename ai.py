@@ -47,9 +47,11 @@ class AI():
         self.engine.say(sentence)
         self.engine.runAndWait()
             
-    def say(self, sentence):
+    def say(self, sentence, wav_name=None):
         
-        wav_name = sentence + ".wav"
+        if wav_name == None:
+            wav_name = sentence + ".wav"
+             
         route = "C:\\Users\\diego\\MelodyneWavs\\" + wav_name
         
         self.before_speaking.trigger(sentence)

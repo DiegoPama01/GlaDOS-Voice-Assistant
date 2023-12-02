@@ -30,7 +30,7 @@ def open_melodyne_file(file):
 
     pyautogui.press("enter")
     
-    time.sleep(3)
+    time.sleep(5)
         
 def close_melodyne():
     

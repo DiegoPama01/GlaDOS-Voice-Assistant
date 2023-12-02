@@ -179,6 +179,7 @@ class Todo():
                     return True
                 print("Item with title", title, "not found")
                 return False
+            
         if uuid:
             self.__todos.remove(uuid)
             return True
@@ -195,12 +196,13 @@ class TodoSkill():
     def handle_command(self, command:str, ai:AI):
         if command in ["abre la lista de tareas", "añade a la lista de tareas"]:
             add_todo(ai)
-        command = ""
+
         if command in ["recuerdame las tareas", "dime las tareas"]:
             list_todos(ai)
-        command = ""
+
         if command in ["elimina una tarea", "tacha una tarea"]:
             remove_todo(ai)
+            
         return command
 
 def initialize():
@@ -210,12 +212,11 @@ todo = Todo()
 
 def add_todo(glados:AI)->bool:
     item = Item()
-    glados.say("Dime que debo añadir")
+    glados.say("Tell me what I need to add")
     try:
         item.title = glados.listen()
         todo.new_item(item)
-        message = "Added " + item.title
-        glados.say(message)
+        glados.say("Item added")
         return True
     except Exception:
         print("oops there was an error")
@@ -223,19 +224,18 @@ def add_todo(glados:AI)->bool:
     
 def list_todos(glados:AI):
     if len(todo) > 0:
-        glados.say("Tus tareas son")
+        glados.say("Your to-dos l are")
         for item in todo:
             glados.say(item.title)
     else:
-        glados.say("No quedan más tareas hoy")
+        glados.say("Your to-dos list is empty")
 
 def remove_todo(glados:AI)->bool:
-    glados.say("Dime que debo eliminar")
+    glados.say("Tell me what I need to remove")
     try:
         item_title = glados.listen()
         todo.remove_item(title=item_title)
-        message = "Eliminado " + item_title
-        glados.say(message)
+        glados.say("Item removed")
         return True
     except Exception:
         print("opps there was an error")

@@ -61,6 +61,7 @@ def export_file():
     pyautogui.hotkey("enter")
 
 def encontrar_posicion_color(color_objetivo, tolerancia=10, margen=150):
+    
     try:
         # Obtener las dimensiones de la pantalla
         ancho_pantalla, alto_pantalla = pyautogui.size()
@@ -69,7 +70,7 @@ def encontrar_posicion_color(color_objetivo, tolerancia=10, margen=150):
         region_de_busqueda = (margen, margen, ancho_pantalla - 2 * margen, alto_pantalla - 2 * margen)
 
         # Captura de pantalla de la región especificada
-        captura_pantalla = pyautogui.screenshot("try.png",region=region_de_busqueda)
+        captura_pantalla = pyautogui.screenshot(region=region_de_busqueda)
 
         # Obtener las dimensiones de la captura de pantalla
         ancho, alto = captura_pantalla.size
@@ -94,50 +95,45 @@ def encontrar_posicion_color(color_objetivo, tolerancia=10, margen=150):
 
     return None
 
-
-# Color objetivo en formato (R, G, B)
-color_objetivo = (229,148,97)
-
-# Tolerancia para la comparación de colores
-tolerancia = 10
-
-# Encontrar la posición del color en la pantalla
-
-
-open_melodyne_file("espeak.wav")
-
-posicion_encontrada = encontrar_posicion_color(color_objetivo, tolerancia)
-
-if posicion_encontrada:
+def change_to_glados_voice():
     
-    print(f"Posición del color encontrado: {posicion_encontrada}")
-    
-    pyautogui.hotkey("ctrl", "a")
-    
-    pyautogui.hotkey("shift", "r")
-    
-    pyautogui.doubleClick(x=posicion_encontrada[0], y=posicion_encontrada[1])
-    
-    pyautogui.hotkey("i")
-    
+    # Color objetivo en formato (R, G, B)
+    color_objetivo = (229,148,97)
+
+    # Tolerancia para la comparación de colores
+    tolerancia = 10
+
+    # Encontrar la posición del color en la pantalla
+
     posicion_encontrada = encontrar_posicion_color(color_objetivo, tolerancia)
-    
+
     if posicion_encontrada:
         
+        print(f"Posición del color encontrado: {posicion_encontrada}")
+        
         pyautogui.hotkey("ctrl", "a")
-
-        pyautogui.hotkey("shift", "t")
+        
+        pyautogui.hotkey("shift", "r")
         
         pyautogui.doubleClick(x=posicion_encontrada[0], y=posicion_encontrada[1])
         
-        export_file()
+        pyautogui.hotkey("i")
+        
+        posicion_encontrada = encontrar_posicion_color(color_objetivo, tolerancia)
+        
+        if posicion_encontrada:
+            
+            pyautogui.hotkey("ctrl", "a")
+
+            pyautogui.hotkey("shift", "t")
+            
+            pyautogui.doubleClick(x=posicion_encontrada[0], y=posicion_encontrada[1])
+            
+            export_file()
+            
+        else:
+            print("El color no se encontró en la pantalla.")
         
     else:
         print("El color no se encontró en la pantalla.")
     
-else:
-    print("El color no se encontró en la pantalla.")
-    
-close_melodyne()
-    
-

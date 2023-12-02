@@ -24,3 +24,6 @@ def text_to_speech(text, filename="sentence.wav"):
 # Ejemplo de uso
 text_to_speech('I am confused',"espeak.wav")
 audioFile.AudioFile("espeak.wav").play()
+
+engine.save_to_file('I am confused', 'db\\I am confused.wav')
+engine.runAndWait()

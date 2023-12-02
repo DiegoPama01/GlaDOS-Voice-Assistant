@@ -14,13 +14,12 @@ class GoodDaySkill():
         now = datetime.now()
         hr = now.hour
         if hr <= 12:
-            message = "Buenos días"
+            message = "Morning routines initialized. Good day, test subject."
         if hr >= 12 <= 17:
-            message = "Buenas tardes"
+            message = "Afternoon protocols engaged. Good afternoon, test subject."
         if hr > 17:
-            message = "Buenas noches"
-        
-        message = message + " Diego"
+            message = "Sleep mode activated. Goodnight, test subject."
+
         ai.say(message)
         return self.name
     

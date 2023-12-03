@@ -6,6 +6,8 @@ import json
 import pyttsx3
 import pygame
 import os
+
+THRESHOLD_VALUE = 0.6
 class AI():
     __name = ""
     __skill = []
@@ -88,16 +90,18 @@ class AI():
            
         phrase = ""
         
-        if self.r.AcceptWaveform(self.audio.read(4096,exception_on_overflow = False)): 
-            self.before_listening.trigger()
-            phrase = self.r.Result()
-            phrase = phrase.removeprefix('the ')
-            
-            phrase = str(json.loads(phrase)["text"])
-
-            if phrase:
-                self.after_listening.trigger(phrase)
-            return phrase   
+        while phrase == "":
+        
+            if self.r.AcceptWaveform(self.audio.read(4096,exception_on_overflow = False)): 
+                self.before_listening.trigger()
+                phrase = self.r.Result()
+                phrase = phrase.removeprefix('the ')
+                
+                phrase = str(json.loads(phrase)["text"])
+                
+                if phrase:
+                    self.after_listening.trigger(phrase)
+                return phrase   
 
         return None
     

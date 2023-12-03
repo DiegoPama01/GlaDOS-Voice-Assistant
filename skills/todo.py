@@ -205,11 +205,6 @@ class TodoSkill():
             
         return command
 
-def initialize():
-    factory.register(TodoSkill.name, TodoSkill)
-
-todo = Todo()
-
 def add_todo(glados:AI)->bool:
     item = Item()
     glados.say("Tell me what I need to add")
@@ -224,7 +219,7 @@ def add_todo(glados:AI)->bool:
     
 def list_todos(glados:AI):
     if len(todo) > 0:
-        glados.say("Your to-dos l are")
+        glados.say("Your to-dos are")
         for item in todo:
             glados.say(item.title)
     else:
@@ -241,4 +236,7 @@ def remove_todo(glados:AI)->bool:
         print("opps there was an error")
         return False
 
-        
+def initialize():
+    factory.register(TodoSkill.name, TodoSkill)
+
+todo = Todo()

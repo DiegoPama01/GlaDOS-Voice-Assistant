@@ -13,19 +13,22 @@ class GoodDaySkill():
     def handle_command(self, _, ai:AI):
         now = datetime.now()
         hr = now.hour
-        index = ""
         if hr <= 12:
-            message = "Morning routines initialized. Good day, test subject."
-            index = "0"
+            message = msg_list[0]
         if hr >= 12 <= 17:
-            message = "Afternoon protocols engaged. Good afternoon, test subject."
-            index = "1"
+            message = msg_list[1]
         if hr > 17:
-            message = "Sleep mode activated. Goodnight, test subject."
-            index = "2"
+            message = msg_list[2]
 
-        ai.say(message, GoodDaySkill.name + index + ".wav")
+        ai.say(message, GoodDaySkill.name + str(msg_list.index(message)) + ".wav")
         return self.name
     
 def initialize():
     factory.register(GoodDaySkill.name,GoodDaySkill)
+    
+    
+msg_list = [
+    "Morning routines initialized. Good day, test subject.",
+    "Afternoon protocols engaged. Good afternoon, test subject.",
+    "Sleep mode activated. Goodnight, test subject."
+]

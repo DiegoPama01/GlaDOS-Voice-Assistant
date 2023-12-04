@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 from pyowm import OWM
 from skills import factory
+from datetime import datetime
 
 from ai import AI
 
 class Weather():
     # Ubicación de la que queremos sacar la informacion
-    __location = "Valencia, ES"
+    __location = "Arrecife, ES"
     # API KEY
     api_key = "69fb7f1f7d1bcddca9763495a9baeb02"
     
@@ -14,9 +15,6 @@ class Weather():
         self.ow = OWM(api_key=self.api_key)
         self.mgr = self.ow.weather_manager()
 
-        city = "Valencia"
-        country = "ES"
-        self.__location = city + ", " + country
 
         
     @property
@@ -37,7 +35,8 @@ class Weather():
             print("Humidity:",humidity)
             print("Temperature:",temperature)
             print("UVI:",uvi)
-            forecast_text = f"Hoy el día estará {detail_status} con un presión media de {pressure} y un índice de húmedad del {humidity}%. Por último la temperatura media está alrededor de los {temperature} grados celsius"
+            forecast_text = f"Today's forecast includes {detail_status} conditions, with an average pressure of {pressure} and a humidity index of {humidity}%. As for the temperature, it's maintaining a cool demeanor at around {temperature} degrees Celsius. Now, don't get too comfortable—Aperture Science has a way of keeping things interesting."
+            print(forecast_text)
             return forecast_text
         except Exception as e:
             print(e)
@@ -51,7 +50,11 @@ class WeatherSkill:
 
     def handle_command(self, _, ai:AI):
         myweather = Weather()
-        ai.say(myweather.forecast())
+        
+        hoy = datetime.now()
+        dia_hoy = hoy.strftime("%d-%m-%Y")
+
+        ai.say(myweather.forecast(), WeatherSkill.name + dia_hoy + ".wav" )
 
 def initialize():
     factory.register(WeatherSkill.name, WeatherSkill)

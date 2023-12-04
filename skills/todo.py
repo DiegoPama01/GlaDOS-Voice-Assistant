@@ -207,11 +207,13 @@ class TodoSkill():
 
 def add_todo(glados:AI)->bool:
     item = Item()
-    glados.say("Tell me what I need to add")
+    msg = msg_list[4]
+    glados.say(msg, wav_name=TodoSkill.name + str(msg_list.index(msg)) + ".wav")
     try:
         item.title = glados.listen()
         todo.new_item(item)
-        glados.say("Item added")
+        msg = msg_list[5]
+        glados.say(msg, wav_name=TodoSkill.name + str(msg_list.index(msg)) + ".wav")
         return True
     except Exception:
         print("oops there was an error")
@@ -219,18 +221,22 @@ def add_todo(glados:AI)->bool:
     
 def list_todos(glados:AI):
     if len(todo) > 0:
-        glados.say("Your to-dos are")
+        msg = msg_list[2]
+        glados.say(msg, wav_name=TodoSkill.name + str(msg_list.index(msg)) + ".wav")
         for item in todo:
             glados.say(item.title)
     else:
-        glados.say("Your to-dos list is empty")
+        msg = msg_list[3]
+        glados.say(msg, wav_name=TodoSkill.name + str(msg_list.index(msg)) + ".wav")
 
 def remove_todo(glados:AI)->bool:
-    glados.say("Tell me what I need to remove")
+    msg = msg_list[0]
+    glados.say(msg, wav_name=TodoSkill.name + str(msg_list.index(msg)) + ".wav")
     try:
         item_title = glados.listen()
         todo.remove_item(title=item_title)
-        glados.say("Item removed")
+        msg = msg_list[1]
+        glados.say(msg, wav_name=TodoSkill.name + str(msg_list.index(msg)) + ".wav")
         return True
     except Exception:
         print("opps there was an error")
@@ -240,3 +246,12 @@ def initialize():
     factory.register(TodoSkill.name, TodoSkill)
 
 todo = Todo()
+
+msg_list=[
+    "Tell me what I need to remove",
+    "Item removed",
+    "Your to-dos are",
+    "Your to-dos list is empty",
+    "Tell me what I need to add",
+    "Item added"
+]

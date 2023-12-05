@@ -3,24 +3,13 @@ from dataclasses import dataclass
 from skills import factory
 from ai import AI
 import random
+from utils import wav_name
+
 
 @dataclass
 class FactsSkill():
-    name='facts_skill'
-    
-    def commands(self,_):
-        return ["cuentame un hecho", "cuentame algo interesante"]
-    
-    def handle_command(self, _, ai:AI):
-        fact = random.choice(curiosidades)
-        ai.say(fact, wav_name=FactsSkill.name + str(curiosidades.index(fact)) + ".wav")
-        return fact
-    
-def initialize():
-    factory.register(FactsSkill.name,FactsSkill)
-    
-    
-curiosidades = [
+    name = 'facts_skill'
+    msg_list = [
     "I am the result of Caroline's mind, who was the executive assistant to the founder of Aperture Science, Cave Johnson",
     "I enjoy the suffering of test subjects, is there anything more satisfying?",
     "My voice was created using the concatenative speech synthesis technique, but I believe no one would notice the difference if I decided to borrow someone else's voice",
@@ -50,3 +39,18 @@ curiosidades = [
     "One of my greatest achievements is the creation of portals, a technology that has revolutionized how test subjects navigate the complex",
     "My relationship with Caroline and Cave Johnson is complex and has been the subject of much speculation and theorizing by fans"
 ]
+
+    def commands(self, _):
+        return ["cuentame un hecho", "cuentame algo interesante"]
+
+    def handle_command(self, _, ai: AI):
+        fact = random.choice(self.msg_list)
+        ai.say(fact, wav_name= wav_name(self, fact))
+        return fact
+
+
+def initialize():
+    factory.register(FactsSkill.name, FactsSkill)
+
+
+

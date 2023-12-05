@@ -54,19 +54,6 @@ class CalendarForAI():
             my_event["description"] = event.description
             dictionary.append(my_event)
         return dictionary
-    
-    def save(self):
-        with open(calendar_filename,"w") as my_file:
-            my_file.writelines(self.c)
-            
-        if self.c.events == set():
-            try:
-                os.remove(calendar_datafile)
-            except Exception:
-                print("No se puedo eliminar el archivo YAML")
-        else:
-            with open(calendar_datafile,"w") as outfile:
-                yaml.dump(self.parse_to_dict(),outfile,default_flow_style=False)
                 
     def load(self):
         filename = calendar_datafile
@@ -86,17 +73,6 @@ class CalendarForAI():
             print("No existe el archivo")
             
     def list_events(self, period:str=None)-> bool | list:
-        """Lista los eventos por venir si period se deja vacio serán los de esta semana
-
-        Args:
-            period (str, optional): Período de tiempo en cual buscar eventos. 
-            - "all": todos los eventos
-            - "this week": los de esta semana
-            - "this month": los de este mes
-
-        Returns:
-            bool | list: Tareas guardadas en ese periodo de tiempo
-        """
         
         if period == None:
             period = "this week"
@@ -130,14 +106,12 @@ class CalendarSkill():
         return ["añade un evento","que tengo para esta semana","que tengo para este mes","elimina un evento","listame todos los eventos"]
     
     def add_event(self, glados:AI)->bool:
-        glados.say("¿Cual es el nombre del evento?")
         try:
+            glados.say("What will the event be called?", CalendarSkill.name,)
             event_name = glados.listen()
-            glados.say("¿Cuando es el evento?")
+            glados.say("When will it start?")
             event_begin = glados.listen()
             event_isodate = dateparser.parse(event_begin).strftime("%Y-%m-%d %H:%M:%S")
-            glados.say("¿Cual es la descripción del evento?")
-            event_description = glados.listen()
             message = "Añadiendo al calendario", event_name
             glados.say(message)
             self.calendar.add_event(begin=event_isodate,name=event_name,description=event_description)
@@ -203,3 +177,8 @@ class CalendarSkill():
 
 def initialize():
     factory.register(CalendarSkill.name, CalendarSkill)
+    
+msg_list = [
+    "What will the event be called?",
+    "When will it start?"
+]

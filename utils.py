@@ -1,8 +1,11 @@
+import os
 import socket
-import os.path
-import datetime as dt
+from datetime import datetime as dt
 from skills.skills import Skill
 from typing import Union, Optional
+from word2number import w2n
+import re
+from googletrans import Translator
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -11,6 +14,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
+import dateparser
+
 
 import hashlib
 
@@ -18,12 +23,13 @@ import hashlib
 def str_to_hash(text: str, lon=16) -> str:
     hash_obj = hashlib.md5()
     text_bytes = text.encode('utf-8')
-    
+
     hash_obj.update(text_bytes)
-    
-    result = hash_obj.hexdigest()[lon]
-    
+
+    result = hash_obj.hexdigest()[:lon]
+
     return result
+
 
 def obtener_ip():
     try:
@@ -35,7 +41,8 @@ def obtener_ip():
         print(f"No se pudo obtener la dirección IP: {e}")
         return None
 
-def normalize(s:str)->str:
+
+def normalize(s: str) -> str:
     """Elimina las tildes de una cadena y devuelve esa cadena normalizada
 
     Args:
@@ -55,7 +62,8 @@ def normalize(s:str)->str:
         s = s.replace(a, b).replace(a.upper(), b.upper())
     return s
 
-def wav_name(skill: Skill, message:str = "", index: Optional[Union[None, str]] = None) -> str:
+
+def wav_name(skill: Skill, message: str = "", index: Optional[Union[None, str]] = None) -> str:
     """Devuelve el nombre del archivo .wav necesario
 
     Args:
@@ -67,73 +75,80 @@ def wav_name(skill: Skill, message:str = "", index: Optional[Union[None, str]] =
     Returns:
         str: Nombre del archivo .wav
     """
-    
+
     if index == None:
         wav_file = skill.name + str(skill.msg_list.index(message)) + ".wav"
     else:
         wav_file = skill.name + index + ".wav"
-        
+
     return wav_file
 
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
-def main():
-    creds = None
-    
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json")
-    
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            creds = flow.run_local_server(port=0)
-        
-        with open("token.json", "w") as token:
-            token.write(creds.to_json()) 
-        
+
+
+
+def recognized_date(raw_string: str):
     try:
-        service = build("calendar", "v3", credentials=creds)
-        
-        now = dt.datetime.now().isoformat() + "Z"
-        
-        event_result = service.events().list(calendarId="primary", timeMin=now, maxResults=10, singleEvents=True, orderBy="startTime").execute()
-        events = event_result.get("items", [])
-        
-        if not events:
-            print("No upcoming events found!")
-            return
-        
-        for event in events:
-            start = event["start"].get("dateTime", event["start"].get("date"))
-            print(start, event["summary"])
-            
-        calendar_id ="4dfd2a7ccdf7bceafc50dc8a37994de9f1e949d78487b53f992e100f33abf04b@group.calendar.google.com"
-            
-        event = {
-            "summary": "Python Event",
-            "start": {
-                "dateTime": "2023-12-05T13:00:00+01:00",
-                "timeZone": "Europe/Vienna"
-            },
-            "end": {
-                "dateTime": "2023-12-05T15:00:00+01:00",
-                "timeZone": "Europe/Vienna"
-            },
-            "recurrence": [
-                "RRULE:FREQ=DAILY;"
-            ]
-        }
-        
-        event = service.events().insert(calendarId=calendar_id, body=event).execute()
-        
-        print(f"Event created {event.get('htmlLink')}")
-        
-    except HttpError as error:
-        print("An error ocurred:", error)
-        
+        hoy = dateparser.parse(raw_string, languages=['es'])
+    except AttributeError as e:
+        print(e)
+        return None
+
+    return hoy
+
+
+
+def change_str_with_number(texto):
+    palabras = texto.split()
+    traductor = Translator()
+
+    for i, palabra in enumerate(palabras):
+        try:
+            numero = w2n.word_to_num(palabra)
+            palabras[i] = str(numero)
+        except ValueError:
+            # Si la palabra no es un número, intenta traducirla a inglés y convertirla
+            palabra_ingles = traductor.translate(palabra, src='es', dest='en').text
+            try:
+                numero_ingles = w2n.word_to_num(palabra_ingles)
+                palabras[i] = str(numero_ingles)
+            except ValueError:
+                pass  # Si no se puede convertir, deja la palabra sin cambios
+
+    # Modificación para agregar ":" entre números consecutivos sin espacios adicionales
+    for i in range(len(palabras) - 1):
+        if palabras[i].isdigit() and palabras[i + 1].isdigit():
+            palabras[i] += ":"
+
+    # Eliminar espacios adicionales y unir las palabras
+    resultado = ' '.join(palabras)
+    resultado = resultado.replace(": ", ":")
+    
+    
+    resultado = resultado.replace("de la mañana", "AM")
+    
+    resultado = resultado.replace("de la tarde", "PM").replace("del mediodia", "PM").replace("de la noche", "PM")
+
+
+    return resultado
+
+
+
+
+def main():
+    
+    texto_original = "Hoy a las trece cuarenta de la mañana"
+    resultado = change_str_with_number(texto_original)
+    print(resultado)
+
+    
+  
+    
+    # service.events().insert(calendarId=CALENDAR_ID, body=ejemplo).execute()
+
+
 if __name__ == "__main__":
     main()

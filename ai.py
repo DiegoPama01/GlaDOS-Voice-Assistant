@@ -1,13 +1,12 @@
 from eventhook import EventHook
 from pyaudio import PyAudio, paInt16
 from vosk import Model, KaldiRecognizer
-import melodyne_voice_change as mvc
 import json
-import pyttsx3
-import pygame
+import melodyne_voice_change as mvc
 import os
+import pygame
+import pyttsx3
 
-THRESHOLD_VALUE = 0.6
 class AI():
     __name = ""
     __skill = []

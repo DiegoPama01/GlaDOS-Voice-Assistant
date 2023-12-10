@@ -6,6 +6,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from dateutil.relativedelta import relativedelta
 from skills import factory
 from utils import wav_name, recognized_date, change_str_with_number
 import os
@@ -35,7 +36,7 @@ class CalendarSkill():
 
     def add_event(self, glados: AI) -> bool:
         try:
-            
+
             all_day = False
 
             # Pillar el nombre del evento
@@ -68,7 +69,7 @@ class CalendarSkill():
                     # Aqui el say que le dice que no se ha entendido
                     glados.say(self.msg_list[4], wav_name(
                         self, self.msg_list[4]))
-                    
+
             # Pillar duración del evento
 
             glados.say(self.msg_list[5], wav_name(self, self.msg_list[5]))
@@ -83,12 +84,10 @@ class CalendarSkill():
                     event_duration = glados.listen()
                     event_duration = change_str_with_number(event_duration)
                     print(event_duration)
-                    
-                    
+
                 if event_duration == "todo el día":
                     all_day = True
                     break
-                    
 
                 event_duration = recognized_date(event_duration)
 
@@ -98,7 +97,6 @@ class CalendarSkill():
                         self, self.msg_list[4]))
 
             # Pillar hora del evento
-
 
             if not all_day:
                 glados.say(self.msg_list[3], wav_name(self, self.msg_list[3]))
@@ -124,7 +122,7 @@ class CalendarSkill():
                 # Añadir evento al calendario
 
                 calendar.create_event(event_name, event_date,
-                                    event_time, event_duration)
+                                      event_time, event_duration)
             else:
                 calendar.create_event(event_name, event_date)
 
@@ -151,15 +149,16 @@ class CalendarSkill():
             print("Hubo un error de algun tipo")
             return False
 
-    def list_events(self, glados: AI, period = "") -> bool:
+    def list_events(self, glados: AI, period="") -> bool:
+
         if period == "diario":
             calendar.list_events(period)
         if period == "semanal":
             calendar.list_events(period)
         if period == "mensual":
             calendar.list_events(period)
-        else:
-            calendar.list_events()
+        if period == "todo":
+            calendar.list_events(period)
 
     def handle_command(self, command: str, ai: AI):
         if command in ["añade un evento"]:
@@ -204,16 +203,17 @@ class CalendarCreds():
         self.service = build("calendar", "v3", credentials=self.creds)
 
     def list_events(self, period: str):
+
         try:
             # Obtén la fecha actual en formato ISO 8601
             today = datetime.utcnow().isoformat() + 'Z'
-            
+
             if period == "semanal":
                 # Define el rango de tiempo para la búsqueda (semanal)
                 end_of_day = (datetime.utcnow() + timedelta(weeks=1)).replace(
                     hour=0, minute=0, second=0, microsecond=0
                 ).isoformat() + 'Z'
-                
+
                 # Realiza la búsqueda de eventos para hoy
                 events_result = self.service.events().list(
                     calendarId=self.CALENDAR_ID,
@@ -222,13 +222,13 @@ class CalendarCreds():
                     singleEvents=True,
                     orderBy='startTime'
                 ).execute()
-                
+
             elif period == "mensual":
                 # Define el rango de tiempo para la búsqueda (mensual)
-                end_of_day = (datetime.utcnow() + timedelta(month=1)).replace(
+                end_of_day = (datetime.utcnow() + relativedelta(months=1)).replace(
                     hour=0, minute=0, second=0, microsecond=0
                 ).isoformat() + 'Z'
-                
+
                 # Realiza la búsqueda de eventos para hoy
                 events_result = self.service.events().list(
                     calendarId=self.CALENDAR_ID,
@@ -237,13 +237,13 @@ class CalendarCreds():
                     singleEvents=True,
                     orderBy='startTime'
                 ).execute()
-                
+
             elif period == "diario":
                 # Define el rango de tiempo para la búsqueda (hoy)
                 end_of_day = (datetime.utcnow() + timedelta(days=1)).replace(
                     hour=0, minute=0, second=0, microsecond=0
                 ).isoformat() + 'Z'
-                
+
                 # Realiza la búsqueda de eventos para hoy
                 events_result = self.service.events().list(
                     calendarId=self.CALENDAR_ID,
@@ -252,28 +252,31 @@ class CalendarCreds():
                     singleEvents=True,
                     orderBy='startTime'
                 ).execute()
-            else:
+
+            elif period == "todo":
                 # Realiza la búsqueda de todos los eventos
                 events_result = self.service.events().list(
                     calendarId=self.CALENDAR_ID,
                     singleEvents=True,
                     orderBy='startTime'
                 ).execute()
-            
-            
+
+                print("No debo salir")
+
             events = events_result.get('items', [])
-            
+
             if not events:
                 print('No hay eventos programados para hoy.')
             else:
-                print('Eventos de hoy:')
+                print('Eventos:')
                 for event in events:
-                    start = event['start'].get('dateTime', event['start'].get('date'))
+                    start = event['start'].get(
+                        'dateTime', event['start'].get('date'))
                     print(f"{start} - {event['summary']}")
         except HttpError as error:
             print("An error ocurred:", error)
 
-    def create_event(self, summary: str, start_day: datetime, start_time = "", event_duration="todo el dia"):
+    def create_event(self, summary: str, start_day: datetime, start_time="", event_duration="todo el dia"):
 
         if event_duration == "todo el dia":
 
@@ -295,7 +298,7 @@ class CalendarCreds():
                 start_day.date(), start_time.time())
 
             # Tomar la fecha y hora actual como referencia para la duración
-            
+
             now = datetime.now()
 
             duration_delta = abs(event_duration - now)
@@ -320,11 +323,13 @@ class CalendarCreds():
                 calendarId=self.CALENDAR_ID, body=event).execute()
 
     def remove_event(self, event_name: str):
-        events_result = self.service.events().list(calendarId=self.CALENDAR_ID, q=event_name).execute()
+        events_result = self.service.events().list(
+            calendarId=self.CALENDAR_ID, q=event_name).execute()
         events = events_result.get('items', [])
         if events:
             event_to_delete = events[0]
-            self.service.events().delete(calendarId=self.CALENDAR_ID, eventId=event_to_delete['id']).execute()
+            self.service.events().delete(calendarId=self.CALENDAR_ID,
+                                         eventId=event_to_delete['id']).execute()
             print(f'Evento "{event_name}" eliminado con éxito.')
         else:
             print(f'No se encontraron eventos con el nombre "{event_name}".')

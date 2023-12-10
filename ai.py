@@ -75,6 +75,7 @@ class AI():
         # Una vez creado el archivo se reproduce
         
         pygame.mixer.init()
+        pygame.mixer.pre_init(44100, -16, 2, 1024)
         
         pygame.mixer.music.load(route)
         

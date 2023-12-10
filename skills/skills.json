@@ -6,7 +6,8 @@
     "skills.jokes",
     "skills.calendar",
     "skills.mirror",
-    "skills.todo"
+    "skills.todo",
+    "skills.sing"
   ],
   "skills": [
     {
@@ -29,6 +30,9 @@
     },
     {
       "name": "todo_skill"
+    },
+    {
+      "name": "sing_skill"
     }
   ]
 }

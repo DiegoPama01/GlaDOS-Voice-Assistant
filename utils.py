@@ -1,18 +1,10 @@
-import os
+
 import socket
 from datetime import datetime as dt
 from skills.skills import Skill
 from typing import Union, Optional
 from word2number import w2n
-import re
 from googletrans import Translator
-
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-
 
 import dateparser
 

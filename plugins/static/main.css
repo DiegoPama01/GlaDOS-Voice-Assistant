@@ -1,0 +1,25 @@
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  ul li{
+    display:inline-block;
+    clear: both;
+    padding: 20px;
+    margin-bottom: 2px;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  
+  .RESPONSE{
+    background: #eee;
+    float: left;
+  }
+  
+  .COMMAND{
+    float: right;
+    background: #0084ff;
+    color: #fff;
+  }

@@ -1,0 +1,18 @@
+{
+    "plugins": [
+        "plugins.conversation_history",
+        "plugins.webui",
+        "plugins.cowsay"
+    ],
+    "items": [
+        {
+            "name": "conversation_history_plugin"
+        },
+        {
+            "name": "webui_plugin"
+        },
+        {
+            "name": "cowsay_plugin"
+        }
+    ]
+}

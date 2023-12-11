@@ -1,0 +1,38 @@
+{
+  "plugins": [
+    "skills.goodday",
+    "skills.weather",
+    "skills.facts",
+    "skills.jokes",
+    "skills.calendar",
+    "skills.mirror",
+    "skills.todo",
+    "skills.sing"
+  ],
+  "skills": [
+    {
+      "name": "weather_skill"
+    },
+    {
+      "name": "facts_skill"
+    },
+    {
+      "name": "jokes_skill"
+    },
+    {
+      "name": "goodday_skill"
+    },
+    {
+      "name": "calendar_skill"
+    },
+    {
+      "name": "mirror_mirror_skill"
+    },
+    {
+      "name": "todo_skill"
+    },
+    {
+      "name": "sing_skill"
+    }
+  ]
+}

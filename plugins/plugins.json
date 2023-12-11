@@ -1,7 +1,8 @@
 {
     "plugins": [
         "plugins.conversation_history",
-        "plugins.webui"
+        "plugins.webui",
+        "plugins.cowsay"
     ],
     "items": [
         {
@@ -9,6 +10,9 @@
         },
         {
             "name": "webui_plugin"
+        },
+        {
+            "name": "cowsay_plugin"
         }
     ]
 }

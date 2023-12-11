@@ -14,7 +14,7 @@
         <script type="text/javascript">
             var intervalId = window.setInterval(doAjax, 500);
             function doAjax() {
-                $.get("http://192.168.1.222:2222/api", function (data, status) {
+                $.get("http://127.0.0.1:2222/api", function (data, status) {
                     let new_ul = [];
                     data.forEach(obj => {
                         new_ul.push("<li class=" +  obj.message_type + ">" + obj.message + "</li>");
